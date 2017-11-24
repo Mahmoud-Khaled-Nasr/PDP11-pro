@@ -1,0 +1,30 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+USE IEEE.std_logic_unsigned.all;
+USE IEEE.numeric_std.all;
+
+ENTITY NBIT_COUNTER_WITH_INITIAL_VALUE IS
+	GENERIC (N: integer := 4 );
+	PORT(
+		CLK, ENABLE : IN std_logic;
+		DATA_IN : IN std_logic_vector(N-1 DOWNTO 0);
+		DATA_OUT : OUT std_logic_vector(N-1 DOWNTO 0));
+END ENTITY NBIT_COUNTER_WITH_INITIAL_VALUE;
+
+ARCHITECTURE OPERATION_COUNT OF NBIT_COUNTER_WITH_INITIAL_VALUE IS
+	SIGNAL RESULT: std_logic_vector (N-1 DOWNTO 0) ;
+	BEGIN
+		PROCESS(CLK, DATA_IN, ENABLE) IS
+			VARIABLE COUNT : std_logic_vector (N-1 DOWNTO 0):= (OTHERS =>'0');
+			BEGIN
+				IF (rising_edge(CLK) AND ENABLE = '1' ) THEN 
+					RESULT <= DATA_IN + COUNT + 1;
+					COUNT := COUNT + 1;
+				ELSIF (ENABLE = '0') THEN
+					COUNT := (OTHERS => '0');
+				ELSIF (rising_edge(ENABLE)) THEN
+					RESULT <= DATA_IN;
+				END IF;
+		END PROCESS;
+		DATA_OUT <= RESULT;
+END OPERATION_COUNT;

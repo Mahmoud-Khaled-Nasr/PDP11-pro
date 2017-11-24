@@ -1,0 +1,27 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.all;
+use IEEE.std_logic_unsigned.all;
+USE IEEE.numeric_std.all;
+
+ENTITY NBIT_COUNTER_WITH_INCREMENT IS
+	GENERIC (N: integer := 4 );
+	PORT(
+		CLK, RST, ENABLE : IN std_logic;
+		INCREMENT : IN std_logic_vector (1 DOWNTO 0);
+		DATA_OUT : OUT std_logic_vector(N-1 DOWNTO 0));
+END ENTITY NBIT_COUNTER_WITH_INCREMENT;
+
+ARCHITECTURE OPERATION_COUNT OF NBIT_COUNTER_WITH_INCREMENT IS
+	SIGNAL COUNT: std_logic_vector (N-1 DOWNTO 0) := (OTHERS => '0');
+	BEGIN
+		PROCESS(CLK, RST, ENABLE, INCREMENT) IS
+			BEGIN
+				IF (RST = '1')THEN
+					COUNT <= (OTHERS => '0');
+				ELSIF (rising_edge(CLK) AND ENABLE = '1' ) THEN 
+					COUNT <= COUNT + INCREMENT + 1;
+				END IF;
+		END PROCESS;
+		DATA_OUT <= COUNT;
+END OPERATION_COUNT;
+
