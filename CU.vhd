@@ -26,6 +26,13 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 		DATA_IN : IN std_logic_vector(N-1 DOWNTO 0);
 		DATA_OUT : OUT std_logic_vector(N-1 DOWNTO 0));
 	END COMPONENT NBIT_COUNTER_WITH_INITIAL_VALUE;
+	
+	COMPONENT ROM IS
+	GENERIC (N: integer := 4; NUMBER_OF_BITS: integer := 11);
+	PORT (
+		ADDRESS_IN : IN std_logic_vector(N-1 DOWNTO 0);
+		DATAOUT_OUT : OUT std_logic_vector(NUMBER_OF_BITS-1 DOWNTO 0));
+	END COMPONENT ROM;
 	---------------The Constants
 	--Address modes
 	CONSTANT REG_ADDRESSING_MODE : integer := 0;
@@ -92,7 +99,7 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 				OR IR(IR_SIZE-1 DOWNTO 12) = X"8" OR IR(IR_SIZE-1 DOWNTO 12) = X"F" )
 		ELSE "010" WHEN IR(IR_SIZE-1 DOWNTO 12) = X"0" AND NOT (IR(11 DOWNTO 8) = X"0")
 		ELSE "011" WHEN IR(IR_SIZE-1 DOWNTO 8) = X"0" AND NOT (IR(7 DOWNTO 0) = X"01")
-		ELSE "100" WHEN IR(IR_SIZE-1 DOWNTO 12) = X"0111" OR IR(IR_SIZE-1 DOWNTO 12) = "1000"
+		ELSE "100" WHEN IR(IR_SIZE-1 DOWNTO 12) = X"8"
 		ELSE "000" WHEN IR = X"0001";
 	
 	-------------------------------------------------------------------------------------------
@@ -135,25 +142,5 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 		END IF;
 		MAIN_COUNTER_INCREMENT <= RESULT;
 	END PROCESS;
-	
-	-- PROCESS (MAIN_COUNTER_OUTPUT, MODE)
-	-- VARIABLE RESULT : std_logic_vector (1 DOWNTO 0);
-	-- BEGIN
-		-- IF (MAIN_COUNTER_OUTPUT = X"0")
-			-- IF (MODE = X"1") THEN
-				-- RESULT := "00"; 
-			-- ELSIF (MODE = X"2") THEN
-				-- RESULT := "01";
-			-- ELSIF (MODE = X"3") THEN
-				-- RESULT := "10";
-			-- ELSIF (MODE = X"4") THEN 
-				-- RESULT := "11";
-			-- END IF;
-		-- ELSIF (MAIN_COUNTER_OUTPUT = X"1" OR MAIN_COUNTER_OUTPUT = X"2" OR MAIN_COUNTER_OUTPUT = X"3" OR MAIN_COUNTER_OUTPUT = X"4")
-			-- RESULT := "00";
-		-- ELSIF 
-		-- END IF;
-		-- INCREMENT <= RESULT;
-	-- END PROCESS;
 	
 END CONTROL_UNIT;
