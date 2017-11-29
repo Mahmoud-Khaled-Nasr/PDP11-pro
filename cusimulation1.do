@@ -1,6 +1,7 @@
 vsim -gui work.cu
 add wave -position insertpoint  \
 sim:/cu/CONTROL_CLK \
+sim:/cu/PROCESSING_CLK \
 sim:/cu/ENABLE_MAIN_COUNTER \
 sim:/cu/ENABLE_INSTRUCTION_COUNTER \
 sim:/cu/NEW_INSTRUCTION \
