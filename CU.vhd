@@ -8,7 +8,8 @@ ENTITY CU IS
 	PORT( --CONTROL_CLK :IN std_logic;
 		IR : IN STD_LOGIC_VECTOR (IR_SIZE-1 DOWNTO 0);
 		FLAG_REGISTER : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-		PU_CONTROL_WORD : OUT STD_LOGIC_VECTOR (ROM_WIDTH-1 DOWNTO 0));
+		PU_CONTROL_WORD : OUT STD_LOGIC_VECTOR (ROM_WIDTH-1 DOWNTO 0);
+		PROCESSING_CLK : OUT STD_LOGIC );
 END ENTITY CU;
 
 ARCHITECTURE CONTROL_UNIT OF CU IS
@@ -143,12 +144,16 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 		
 	-------------------------------Creating the control clk-----------------------------------
 	------------------------------------------------------------------------------------------
-	PROCESS
-	BEGIN
+	PROCESS 
+	BEGIN 
 		CONTROL_CLK <= '1';
-		WAIT FOR HALF_CYCLE;
+		WAIT FOR HALF_CYCLE / 2;
+		PROCESSING_CLK <= '1';
+		WAIT FOR HALF_CYCLE / 2;
 		CONTROL_CLK <= '0';
-		WAIT FOR HALF_CYCLE;
+		WAIT FOR HALF_CYCLE / 2;
+		PROCESSING_CLK <= '0';
+		WAIT FOR HALF_CYCLE / 2;
 	END PROCESS;
 	
 	------------------------------------------------------------------------------------------	
