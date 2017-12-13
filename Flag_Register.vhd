@@ -20,7 +20,7 @@ begin
 	begin
 		if (RST='1') then
 			Q<=(others=>'0');
-		elsif(rising_edge(clk) and enb='1')then
+		elsif(falling_edge(clk) and enb='1')then
 			Q<=D;
 		end if;
 	end process;
