@@ -30,6 +30,7 @@ PACKAGE MY_PACKAGE IS
 	
 
 	CONSTANT REGISTER_STATES_ON_BUS : INTEGER :=12;
+	CONSTANT RAM_SIZE		: INTEGER :=11;
 	
 
 	----------------------------------OPCODES FOR EXECUTE_BLOCK-------------------------------
