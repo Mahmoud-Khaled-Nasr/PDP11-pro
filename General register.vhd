@@ -28,7 +28,8 @@ SEL <= ENB XOR ENBX;
 		if (RST='1') then
 			Q  <= (OTHERS=>'0');
 			QX <= (OTHERS=>'0');
-		elsif(rising_edge(CLK) AND SEL='1')then
+		--Changed from rising edge to falling edge
+	elsif(falling_edge(CLK) AND SEL='1')then
 			IF(ENB='1') THEN
 				Q  <= D;
 				QX <= D;
