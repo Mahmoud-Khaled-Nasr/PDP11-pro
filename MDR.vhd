@@ -1,1 +1,62 @@
 
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+USE WORK.MY_PACKAGE.ALL;
+
+ENTITY MDR IS
+	GENERIC (MDR_SIZE : INTEGER := 32);
+	PORT (
+		D,DX,RAM_OUT	: IN STD_LOGIC_VECTOR (MDR_SIZE-1 DOWNTO 0);	--DX : IF ENB=1 INPUT=D , IF ENBX=1 INPUT=DX
+		CLK,RST		: IN STD_LOGIC;
+		ENB,ENBX,RD,TYP	: IN STD_LOGIC;
+		Q,QX,RAM_IN 	: OUT STD_LOGIC_VECTOR (MDR_SIZE-1 DOWNTO 0)	--QX IS THE SAME AS 'Q' NO THING ELSE
+	);
+END ENTITY MDR;
+
+architecture MDR_ARCH of MDR is
+
+SIGNAL SEL :STD_LOGIC;
+begin
+
+
+SEL <= ENB XOR ENBX;
+
+	process(RST,CLK,ENB,ENBX)
+	begin
+		IF (RST='1') then
+			Q  <= (OTHERS=>'0');
+			QX <= (OTHERS=>'0');
+			RAM_IN <= (OTHERS=>'0');
+		--Changed from rising edge to falling edge
+	elsif(falling_edge(CLK) AND (SEL='1' OR RD='1'))then
+			IF(ENB='1') THEN
+				Q  <= D;
+				QX <= D;
+				RAM_IN <= D;
+			ELSIF(ENBX='1')THEN
+				Q  <= DX;
+				QX <= DX;
+				RAM_IN <= DX;
+			ELSIF(RD='1') THEN
+				IF(TYP='1') THEN
+					Q <= RAM_OUT;
+					QX <= RAM_OUT;
+					RAM_IN <= RAM_OUT;
+				ELSIF(TYP='0') THEN
+					Q(15 DOWNTO 0) <= RAM_OUT(15 DOWNTO 0);
+					Q(MDR_SIZE-1 DOWNTO 16) <= (OTHERS=>'0');
+					QX(15 DOWNTO 0) <= RAM_OUT(15 DOWNTO 0);
+					QX(MDR_SIZE-1 DOWNTO 16) <= (OTHERS=>'0');
+					RAM_IN(15 DOWNTO 0) <= RAM_OUT(15 DOWNTO 0);
+					RAM_IN(MDR_SIZE-1 DOWNTO 16) <= (OTHERS=>'0');
+					
+					
+				END IF;
+			END IF;	
+		end if;
+	end process;
+
+
+end MDR_ARCH;
