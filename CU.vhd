@@ -4,12 +4,18 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 USE WORK.MY_PACKAGE.ALL;
 
+--DAWOD : I MOVED THE CLK GENERATOR TO THE PU INSTEAD OF THE CU
+--DAWOD : I DELETED THE CLK GENERATOR & REMOVE THE CONTROL_CLK SIGNAL TO MAKE IT INPUT FOR THE ENTITY & FINALLY I COMMENTED THE PROCESSING_CLK PORT FROM THE ENTITY.
+
+
+
 ENTITY CU IS
 	PORT( --CONTROL_CLK :IN std_logic;
 		IR 		: IN STD_LOGIC_VECTOR (IR_SIZE-1 DOWNTO 0);
 		FLAG_REGISTER 	: IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-		PU_CONTROL_WORD : OUT STD_LOGIC_VECTOR (ROM_WIDTH-1 DOWNTO 0);
-		PROCESSING_CLK 	: OUT STD_LOGIC );
+		PU_CONTROL_WORD : OUT STD_LOGIC_VECTOR (ROM_WIDTH-1 DOWNTO 0):="0000000000000000000000000011";
+--		PROCESSING_CLK 	: OUT STD_LOGIC );
+		control_clk	: in std_logic );
 END ENTITY CU;
 
 ARCHITECTURE CONTROL_UNIT OF CU IS
@@ -69,7 +75,7 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 	END COMPONENT EXECUTE_BLOCK;
 
 	--CLK SIGNAL
-	SIGNAL CONTROL_CLK : std_logic;
+--	SIGNAL CONTROL_CLK : std_logic;
 	--TODO set NEW_INSTRUCTION bit at the end of every instruction and clear it at the start of every instruction TO RESET THE CIRCUIT
 	------------------------COUNTERS SIGNALS-------------------
 	--RESET THE MAIN COUNTER
@@ -157,17 +163,7 @@ ARCHITECTURE CONTROL_UNIT OF CU IS
 		
 	-------------------------------Creating the control clk-----------------------------------
 	------------------------------------------------------------------------------------------
-	PROCESS 
-	BEGIN 
-		CONTROL_CLK <= '1';
-		WAIT FOR HALF_CYCLE / 2;
-		PROCESSING_CLK <= '1';
-		WAIT FOR HALF_CYCLE / 2;
-		CONTROL_CLK <= '0';
-		WAIT FOR HALF_CYCLE / 2;
-		PROCESSING_CLK <= '0';
-		WAIT FOR HALF_CYCLE / 2;
-	END PROCESS;
+
 	
 	------------------------------------------------------------------------------------------	
 	----------------------------------Logic---------------------------------------------------
