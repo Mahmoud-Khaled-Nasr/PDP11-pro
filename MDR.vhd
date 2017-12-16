@@ -23,14 +23,14 @@ begin
 
 SEL <= ENB XOR ENBX;
 
-	process(RST,CLK,ENB,ENBX)
+	process(RST,CLK,ENB,ENBX,RD)
 	begin
 		IF (RST='1') then
 			Q  <= (OTHERS=>'0');
 			QX <= (OTHERS=>'0');
 			RAM_IN <= (OTHERS=>'0');
 		--Changed from rising edge to falling edge
-	elsif(falling_edge(CLK) AND (SEL='1' OR RD='1'))then
+	ELSIF(falling_edge(CLK) AND SEL='1')then
 			IF(ENB='1') THEN
 				Q  <= D;
 				QX <= D;
@@ -39,7 +39,9 @@ SEL <= ENB XOR ENBX;
 				Q  <= DX;
 				QX <= DX;
 				RAM_IN <= DX;
-			ELSIF(RD='1') THEN
+			END IF;
+
+	ELSIF(RD='1') THEN
 				IF(TYP='1') THEN
 					Q <= RAM_OUT;
 					QX <= RAM_OUT;
@@ -51,11 +53,8 @@ SEL <= ENB XOR ENBX;
 					QX(MDR_SIZE-1 DOWNTO 16) <= (OTHERS=>'0');
 					RAM_IN(15 DOWNTO 0) <= RAM_OUT(15 DOWNTO 0);
 					RAM_IN(MDR_SIZE-1 DOWNTO 16) <= (OTHERS=>'0');
-					
-					
 				END IF;
-			END IF;	
-		end if;
+	END IF;	
 	end process;
 
 
