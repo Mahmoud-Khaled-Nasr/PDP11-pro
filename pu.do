@@ -23,4 +23,5 @@ vsim work.pu
 # ** Warning: (vsim-8683) Uninitialized out port /pu/RAM_LAB/MDR_READ has no driver.
 # This port will contribute value (U) to the signal network.
 add wave sim:/pu/*
-mem load -i /home/dawod/intelFPGA_pro/17.0/modelsim_ase/linuxaloem/RAM.mem -filltype value -filldata RAM -fillradix symbolic -skip 0 -update_properties /pu/RAM_LAB/MEMORY
+add wave sim:/pu/CONTROL_UNIT/*
+mem load -i ./RAM.mem -filltype value -filldata RAM -fillradix symbolic -skip 0 -update_properties /pu/RAM_LAB/MEMORY

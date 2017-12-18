@@ -1,7 +1,6 @@
 vsim -gui work.cu
 add wave -position insertpoint  \
-sim:/cu/CONTROL_CLK \
-sim:/cu/PROCESSING_CLK \
+sim:/cu/control_clk \
 sim:/cu/ENABLE_MAIN_COUNTER \
 sim:/cu/ENABLE_INSTRUCTION_COUNTER \
 sim:/cu/NEW_INSTRUCTION \
@@ -24,10 +23,12 @@ sim:/cu/EXECUTE_BRANCH_BLOCK_INITIAL_ADDRESS_OUTPUT \
 sim:/cu/FLAG_REGISTER \
 sim:/cu/ROM_BLOCKS_OUTPUT 
 
+
+force -freeze sim:/cu/control_clk 0 0, 1 {50 ps} -r 100
 force -freeze sim:/cu/IR 0001 0
 force -freeze sim:/cu/FLAG_REGISTER 0 0
 run 100
+force -freeze sim:/cu/IR 105A 0
 run 50
-force -freeze sim:/cu/IR 81ff 0
 run 50
 run 100
