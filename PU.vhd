@@ -172,6 +172,7 @@ SIGNAL INSTRUCTION		:STD_LOGIC_VECTOR(IR_SIZE-1 DOWNTO 0);
 SIGNAL MFC_SIGNAL,MDR_READ_SIGNAL:STD_LOGIC;
 SIGNAL IR_RESET			:STD_LOGIC;
 
+SIGNAL HLT : STD_LOGIC := '0';
 
 BEGIN
 
@@ -332,9 +333,9 @@ BEGIN
 	----------------------------------CLK Generation----------------------------------------
 	PROCESS 
 	BEGIN 
-		CONTROL_CLK <= '1';
+		CONTROL_CLK <= '1' AND HLT;
 		WAIT FOR HALF_CYCLE / 2;
-		PROCESSING_CLK <= '1';
+		PROCESSING_CLK <= '1' AND HLT;
 		WAIT FOR HALF_CYCLE / 2;
 		CONTROL_CLK <= '0';
 		WAIT FOR HALF_CYCLE / 2;
@@ -343,6 +344,8 @@ BEGIN
 	END PROCESS;
 	
 	----------------------------------------------------------------------------------------
-	
+	---------------------------------HLT CIRCUIT--------------------------------------------
+	HLT <= '0' WHEN INSTRUCTION(15 DOWNTO 0) = X"0000" ELSE
+		'1';
 	
 END PROCESSING_UNIT;
