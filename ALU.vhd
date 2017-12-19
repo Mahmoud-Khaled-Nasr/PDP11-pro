@@ -9,6 +9,7 @@ PORT(
    A,B : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
    OPCODE : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
    FLAG_REGISTER : INOUT STD_LOGIC_VECTOR (3 DOWNTO 0);		--FLAG REGISTER(3 DOWNTO 0)->(_ _ C Z)
+   FLAG_REGISTER_OUT : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
    OUTPUT : OUT STD_LOGIC_VECTOR(31 downto 0));
 END ALU;
 ARCHITECTURE ALU_arch OF ALU IS
@@ -26,6 +27,13 @@ VARIABLE ZERO_FLAG   : STD_LOGIC;
 VARIABLE OVER_FLOW_FLAG : STD_LOGIC;
 VARIABLE NEGATIVE_FLAG : STD_LOGIC;
 BEGIN
+
+FLAG_REGISTER_OUT(0)<=FLAG_REGISTER(0);
+FLAG_REGISTER_OUT(1)<=FLAG_REGISTER(1);
+FLAG_REGISTER_OUT(2)<=FLAG_REGISTER(2);
+FLAG_REGISTER_OUT(3)<=FLAG_REGISTER(3);
+
+-------------------------------------------------------------
       -- NO OPERATION --
       IF(OPCODE=X"00")THEN   
         TEMP_OUTPUT_WITH_CARRY := (OTHERS=>'0');
@@ -59,7 +67,7 @@ BEGIN
 
      -- MOVE OPERATION --
      ELSIF(OPCODE=X"05") THEN
-         TEMP_OUTPUT := (OTHERS=>'0');
+         TEMP_OUTPUT := (A);
         
 -------------------------------------------------------------------------
      -- BIC OPERATION --
@@ -180,20 +188,20 @@ END IF;
 
 
  IF(OPCODE=X"01" OR OPCODE=X"02" OR OPCODE=X"0C" OR OPCODE=X"0D" OR OPCODE=X"03" OR OPCODE=X"04" OR OPCODE=X"0E" OR OPCODE=X"0F" OR OPCODE=X"10" OR OPCODE=X"11" OR OPCODE=X"12" OR OPCODE=X"13" OR OPCODE=X"14" OR OPCODE=X"15" OR OPCODE=X"16" OR OPCODE=X"17") THEN
-         FLAG_REGISTER(1)<=CARRY_FLAG;
+         FLAG_REGISTER_OUT(1)<=CARRY_FLAG;
      END IF;
 --------------------------------------------------------------------- 
    --CHECK FOR ZERO FLAG
     IF(OPCODE/= X"00" AND TEMP_OUTPUT = ZEROES) THEN
-         FLAG_REGISTER(0)<='1';
-      ELSE FLAG_REGISTER(0)<='0';     
+         FLAG_REGISTER_OUT(0)<='1';
+      ELSE FLAG_REGISTER_OUT(0)<='0';     
         END IF;
 ---------------------------------------------------------------------
   -- CHECK FOR NEGATIVE FLAG --------------------
       IF(OPCODE /= X"00") THEN
         IF(TEMP_OUTPUT(31)='1') THEN
-            FLAG_REGISTER(2)<='1';
-        ELSE FLAG_REGISTER(2)<='0';
+            FLAG_REGISTER_OUT(2)<='1';
+        ELSE FLAG_REGISTER_OUT(2)<='0';
         END IF;
        
 ----------------------------------------------------------------------
@@ -224,7 +232,7 @@ END IF;
 
 
 IF(OPCODE /= X"00") THEN
-FLAG_REGISTER(3) <= OVER_FLOW_FLAG;
+FLAG_REGISTER_OUT(3) <= OVER_FLOW_FLAG;
 END IF;
 
 
