@@ -25,14 +25,14 @@ ARCHITECTURE RAM_ARCH OF RAM IS
 	SIGNAL MEMORY : RAM_TYPE ;
 	
 	BEGIN
-		PROCESS(CLK) IS
+		PROCESS(DATA_IN, WRT) IS
 			BEGIN
-				IF rising_edge(CLK) THEN  
+--				IF rising_edge(CLK) THEN  
 					IF WRT = '1' THEN
 						MEMORY(to_integer(unsigned(ADDRESS))) <= DATA_IN(15 DOWNTO 0);
 						MEMORY(to_integer(unsigned(ADDRESS+1))) <= DATA_IN(CELL_SIZE-1 DOWNTO 16);
 					END IF;
-				END IF;
+--				END IF;
 		END PROCESS;
 
 
